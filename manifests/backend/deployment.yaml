@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: documind-backend
+  namespace: documind
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: documind-backend
+  template:
+    metadata:
+      labels:
+        app: documind-backend
+    spec:
+      serviceAccountName: documind-backend
+      containers:
+        - name: backend
+          image: 560205084952.dkr.ecr.us-east-1.amazonaws.com/documind-backend:latest
+          ports:
+            - containerPort: 3002
+          env:
+            - name: AWS_S3_BUCKET_NAME
+              value: "documind-dev-documents-560205084952"
+            - name: AWS_REGION
+              value: "us-east-1"
+          envFrom:
+            - secretRef:
+                name: documind-backend-secrets
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3002
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3002
+            initialDelaySeconds: 5
+            periodSeconds: 10
