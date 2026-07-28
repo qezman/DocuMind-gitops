@@ -18,7 +18,7 @@ spec:
               service:
                 name: documind-backend
                 port:
-                  number: 3001
+                  number: 3002
           - path: /()(.*)
             pathType: ImplementationSpecific
             backend:
