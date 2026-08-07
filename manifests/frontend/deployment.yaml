@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: 560205084952.dkr.ecr.us-east-1.amazonaws.com/documind-frontend:latest
+          image: 332130072211.dkr.ecr.us-east-1.amazonaws.com/documind-frontend:latest
           ports:
             - containerPort: 80
 

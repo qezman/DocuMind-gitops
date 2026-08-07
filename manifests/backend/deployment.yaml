@@ -16,12 +16,12 @@ spec:
       serviceAccountName: documind-backend
       containers:
         - name: backend
-          image: 560205084952.dkr.ecr.us-east-1.amazonaws.com/documind-backend:latest
+          image: 332130072211.dkr.ecr.us-east-1.amazonaws.com/documind-backend:latest
           ports:
             - containerPort: 3002
           env:
             - name: AWS_S3_BUCKET_NAME
-              value: "documind-dev-documents-560205084952"
+              value: "documind-dev-documents-332130072211"
             - name: AWS_REGION
               value: "us-east-1"
           envFrom:
