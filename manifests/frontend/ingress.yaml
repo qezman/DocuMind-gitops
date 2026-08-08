@@ -30,6 +30,6 @@ spec:
             pathType: ImplementationSpecific
             backend:
               service:
-                name: kube-prometheus-stack-grafana
+                name: grafana-proxy
                 port:
                   number: 80

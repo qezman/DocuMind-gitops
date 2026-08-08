@@ -1,0 +1,12 @@
+# Proxies to Grafana's Service in the monitoring namespace, since a
+# Kubernetes Ingress can only route to Services in its own namespace.
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-proxy
+  namespace: documind
+spec:
+  type: ExternalName
+  externalName: kube-prometheus-stack-grafana.monitoring.svc.cluster.local
+  ports:
+    - port: 80
