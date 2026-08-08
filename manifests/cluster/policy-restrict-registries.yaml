@@ -1,0 +1,27 @@
+# Kyverno policy: only allows container images from this AWS account's ECR,
+# public ECR, or Docker Hub official images.
+# NB: account ID (332130072211) is hardcoded below
+
+apiVersion: kyverno.io/v16
+kind: ClusterPolicy
+metadata:
+  name: restrict-image-registries
+  annotations:
+    policies.kyverno.io/title: Restrict Image Registries
+    policies.kyverno.io/severity: medium
+spec:
+  validationFailureAction: Audit
+  background: true
+  rules:
+    - name: validate-registries
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+      validate:
+        message: "Images must come from an approved registry (ECR, public.ecr.aws, or docker.io official images)."
+        pattern:
+          spec:
+            containers:
+              - image: "332130072211.dkr.ecr.us-east-1.amazonaws.com/* | public.ecr.aws/* | docker.io/* | *.docker.io/*"

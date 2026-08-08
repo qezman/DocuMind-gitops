@@ -1,0 +1,27 @@
+# Kyverno policy: flags pods that don't explicitly set runAsNonRoot.
+# Currently in Audit mode (reports violations, doesn't block).
+# Switch validationFailureAction to Enforce once verified nothing legitimate gets flagged.
+
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: disallow-root-user
+  annotations:
+    policies.kyverno.io/title: Disallow Root User
+    policies.kyverno.io/severity: medium
+spec:
+  validationFailureAction: Audit
+  background: true
+  rules:
+    - name: check-runasnonroot
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+      validate:
+        message: "Running as root is not allowed. Set runAsNonRoot to true."
+        pattern:
+          spec:
+            =(securityContext):
+              =(runAsNonRoot): "true"
