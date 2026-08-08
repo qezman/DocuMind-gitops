@@ -26,3 +26,18 @@ spec:
                 name: documind-frontend
                 port:
                   number: 80
+          - path: /grafana(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: kube-prometheus-stack-grafana
+                port:
+                  number: 80
+
+          - path: /grafana(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: kube-prometheus-stack-grafana
+                port:
+                  number: 80
