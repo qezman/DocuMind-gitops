@@ -26,10 +26,3 @@ spec:
                 name: documind-frontend
                 port:
                   number: 80
-          - path: /grafana(/|$)(.*)
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: grafana-proxy
-                port:
-                  number: 80
