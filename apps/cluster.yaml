@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: documind-cluster
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/qezman/DocuMind-gitops
+    targetRevision: main
+    path: manifests/cluster # watches Kyverno ClusterPolicy manifests
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kyverno # ClusterPolicies are cluster-scoped, but ArgoCD still needs a namespace for its own bookkeeping
+  syncPolicy:
+    automated:
+      prune: true # if a policy file is removed from git, delete it from the cluster too
+      selfHeal: true # if someone edits/deletes a policy manually, revert to match git
+    syncOptions:
+      - CreateNamespace=true
