@@ -2,7 +2,7 @@
 # public ECR, or Docker Hub official images.
 # NB: account ID (332130072211) is hardcoded below
 
-apiVersion: kyverno.io/v16
+apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
   name: restrict-image-registries
