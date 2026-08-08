@@ -1,0 +1,30 @@
+# Alerts on backend pod health. Fires if:
+# 1. No healthy backend pod exists for 2+ minutes (real outage)
+# 2. A pod is crash-looping (restarting repeatedly)
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: documind-backend-alerts
+  namespace: monitoring   # PrometheusRules must live where the Prometheus Operator watches
+  labels:
+    release: kube-prometheus-stack   # required: tells the operator to pick this rule up
+spec:
+  groups:
+    - name: documind-backend
+      rules:
+        - alert: BackendDown
+          expr: kube_deployment_status_replicas_available{deployment="documind-backend", namespace="documind"} == 0
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: "DocuMind backend has zero available replicas"
+            description: "The backend Deployment has had no healthy pods for over 2 minutes."
+
+        - alert: BackendCrashLooping
+          expr: increase(kube_pod_container_status_restarts_total{namespace="documind", pod=~"documind-backend.*"}[15m]) > 3
+          labels:
+            severity: warning
+          annotations:
+            summary: "DocuMind backend is crash-looping"
+            description: "The backend pod has restarted more than 3 times in the last 15 minutes."
