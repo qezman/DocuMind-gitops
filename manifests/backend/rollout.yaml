@@ -1,13 +1,21 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
 metadata:
   name: documind-backend
   namespace: documind
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: documind-backend
+  strategy:
+    canary:
+      steps:
+        - setWeight: 25   # send 25% of traffic to the new version
+        - pause: { duration: 30s }
+        - setWeight: 50
+        - pause: { duration: 30s }
+        - setWeight: 100  # full rollout
   template:
     metadata:
       labels:
@@ -19,14 +27,14 @@ spec:
           image: 332130072211.dkr.ecr.us-east-1.amazonaws.com/documind-backend:latest
           ports:
             - containerPort: 3002
+          envFrom:
+            - secretRef:
+                name: documind-backend-secrets
           env:
             - name: AWS_S3_BUCKET_NAME
               value: "documind-dev-documents-332130072211"
             - name: AWS_REGION
               value: "us-east-1"
-          envFrom:
-            - secretRef:
-                name: documind-backend-secrets
           resources:
             requests:
               cpu: 100m
