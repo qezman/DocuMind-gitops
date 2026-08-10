@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: documind-agent
+  namespace: documind
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: documind-agent
+  template:
+    metadata:
+      labels:
+        app: documind-agent
+    spec:
+      serviceAccountName: documind-agent
+      containers:
+        - name: agent
+          image: 332130072211.dkr.ecr.us-east-1.amazonaws.com/documind-agent:latest
+          ports:
+            - containerPort: 3003
+          envFrom:
+            - secretRef:
+                name: documind-backend-secrets # reuses GEMINI_API_KEY, already synced
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 200m
+              memory: 256Mi
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3003
+            initialDelaySeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3003
+            initialDelaySeconds: 5

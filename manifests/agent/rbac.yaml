@@ -1,0 +1,31 @@
+# the agent can inspect
+# this app's own pods/logs, nothing else in the cluster.
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: documind-agent
+  namespace: documind
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: agent-readonly
+  namespace: documind
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "pods/log"]
+    verbs: ["get", "list"] # no "delete", "patch", "create" (read-only by design)
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: agent-readonly-binding
+  namespace: documind
+subjects:
+  - kind: ServiceAccount
+    name: documind-agent
+    namespace: documind
+roleRef:
+  kind: Role
+  name: agent-readonly
+  apiGroup: rbac.authorization.k8s.io
