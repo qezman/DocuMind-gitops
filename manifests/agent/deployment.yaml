@@ -16,7 +16,7 @@ spec:
       serviceAccountName: documind-agent
       containers:
         - name: agent
-          image: 332130072211.dkr.ecr.us-east-1.amazonaws.com/documind-agent:latest
+          image: 332130072211.dkr.ecr.us-east-1.amazonaws.com/documind-agent:c59850c41648fba67e5eceb08d745c4d2cfb8ade
           ports:
             - containerPort: 3003
           envFrom:
