@@ -16,6 +16,3 @@ spec:
     automated:
       prune: true
       selfHeal: true
-    # No CreateNamespace=true here - see apps/backend.yaml for why: the
-    # "documind" Namespace is owned solely by documind-frontend's
-    # manifests/frontend/namespace.yaml.

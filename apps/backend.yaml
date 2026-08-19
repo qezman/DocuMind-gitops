@@ -16,10 +16,3 @@ spec:
     automated:
       prune: true
       selfHeal: true
-    # No CreateNamespace=true here: documind-frontend's Application owns the
-    # "documind" Namespace via manifests/frontend/namespace.yaml. Having
-    # multiple Applications independently manage the same Namespace object
-    # (via CreateNamespace=true, which re-applies it on every sync) makes
-    # ArgoCD flag it as a shared resource and each app's tracking annotation
-    # fights the others - that's what caused this app to flap between
-    # Synced/OutOfSync. Only one Application should own it.
