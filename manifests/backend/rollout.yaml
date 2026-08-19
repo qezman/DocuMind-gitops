@@ -24,7 +24,7 @@ spec:
       serviceAccountName: documind-backend
       containers:
         - name: backend
-          image: 332130072211.dkr.ecr.us-east-1.amazonaws.com/documind-backend:68daa58cd9e9aaa6e025a57ce33f9900de0f057c
+          image: 332130072211.dkr.ecr.us-east-1.amazonaws.com/documind-backend:7e7a16b2b15e858f881483a15c4f99b88a76f75f
           ports:
             - containerPort: 3002
           envFrom:
